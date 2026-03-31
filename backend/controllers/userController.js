@@ -2,7 +2,7 @@
  import bcrypt from "bcrypt";
  import jwt  from "jsonwebtoken";
 
- export const register = async(req,res)=>{
+ export const registerUser = async(req,res)=>{
     try {
         const {name,email,password} = req.body;
         if(!name || !email || !password){
@@ -27,7 +27,7 @@
     }
  }
 
- export const login = async(req,res)=>{
+ export const loginUser = async(req,res)=>{
     try {
         const {email,password}=req.body;
         const user = await userModel.findOne({email});

@@ -1,6 +1,10 @@
 import React from "react";
+import Footer from "../components/Footer";
 
 const Landing = () => {
+  const onUserClick = ()=>{
+    window.location.href = "/login";
+  }
   return (
     <div className="min-h-screen flex flex-col">
       <section className="relative overflow-hidden bg-gradient-to-br from-[#1A9E83]/5 via-[#1a9e84b4]/25 to-white py-16 md:py-32">
@@ -19,7 +23,7 @@ const Landing = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               {/* USER DASHBOARD BUTTON */}
-              <button className="inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-[#1A9E83] text-[#FFFFFF] hover:bg-[#1A9E83]/90 h-11 text-base gap-2 px-8 py-6 rounded-xl shadow-lg shadow-[#1A9E83]/25 hover:shadow-xl hover:shadow-[#1A9E83]/30 transition-all">
+              <button onClick={onUserClick} className="inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-[#1A9E83] text-[#FFFFFF] hover:bg-[#1A9E83]/90 h-11 text-base gap-2 px-8 py-6 rounded-xl shadow-lg shadow-[#1A9E83]/25 hover:shadow-xl hover:shadow-[#1A9E83]/30 transition-all">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -218,12 +222,7 @@ const Landing = () => {
           </div>
         </div>
       </section>
-      <footer class="py-10 bg-[#081d19] text-[#ffffff]">
-      <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-        <p class="font-semibold text-background">FundFlow</p>
-        <p>© 2026 FundFlow. All rights reserved.</p>
-        </div>
-        </footer>
+      <Footer/>
     </div>
   );
 };
