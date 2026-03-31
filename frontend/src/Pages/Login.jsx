@@ -28,7 +28,7 @@ const onSubmitHandler = async(e)=>{
         setToken(data.token);
         setUsername(data.user);
         setShowLogin(false);
-        localStorage.setItem("token",data.token);
+        localStorage.setItem("tokens",data.token);
         navigate("/");
       }
       else{
@@ -45,7 +45,7 @@ const onSubmitHandler = async(e)=>{
         setToken(data.token);
         setUsername(data.user);
         setShowLogin(false);
-        localStorage.setItem("token",data.token);
+        localStorage.setItem("tokens",data.token);
         navigate("/");
       }
       else{
