@@ -38,6 +38,7 @@ import OrganiserLogin from './Pages/OrganiserLogin'  // ← add
 import Dashboard from './Pages/Dashboard'                 // ← add
 import Campaigns from './components/Campaigns'            // ← add
 import AllCampaigns from './Pages/AllCampaigns'           // ← add
+import CampaignIndividual from './Pages/CampaignIndividual'
 
 function App() {
   const { showLogin } = useContext(AppContext);
@@ -50,6 +51,7 @@ function App() {
         <Route path="/login"            element={<Login />} />
         <Route path="/campaigns"        element={<Campaigns />} />
         <Route path="/all-campaigns"    element={<AllCampaigns />} />
+        <Route path="/campaign/:id"    element={<CampaignIndividual />} />
         <Route path="/organiser/login"  element={<OrganiserLogin />} />
         <Route path="/dashboard"        element={<Dashboard />} />
       </Routes>

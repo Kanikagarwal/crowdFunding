@@ -5,7 +5,7 @@ import { AppContext } from "../context/AppContext";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const { organiserToken, organiserName, logoutOrganiser, token, setToken, setShowLogin } = useContext(AppContext);
+  const { organiserToken, organiserName, logoutOrganiser, token, setToken, setShowLogin, user } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
@@ -90,7 +90,7 @@ const Navbar = () => {
 
                 {/* Username */}
                 <span className="hidden sm:inline">
-                  {organiserToken ? organiserName : "User"}
+                  {organiserToken ? organiserName :  (user?user.name:"User")}
                 </span>
                 
                 <svg

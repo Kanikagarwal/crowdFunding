@@ -37,7 +37,7 @@ export const AppContext = createContext()
 
 const AppContextProvider = ({ children }) => {
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
   // --- existing user states ---
   const [token, setToken]           = useState(localStorage.getItem('tokens') || null)
@@ -59,6 +59,13 @@ const AppContextProvider = ({ children }) => {
     setOrganiserName(name)
   }
 
+  const loginUser = (token, name) => {
+    localStorage.setItem('userToken', token)
+    localStorage.setItem('userName', name)
+    setToken(token)
+    setUser(name)
+  }
+
   const logoutOrganiser = () => {
     localStorage.removeItem('organiserToken')
     localStorage.removeItem('organiserName')
@@ -72,6 +79,7 @@ const AppContextProvider = ({ children }) => {
     token, setToken,
     user, setUser,
     showLogin, setShowLogin,
+    loginUser,
     // new organiser
     organiserToken, organiserName,
     loginOrganiser, logoutOrganiser

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [login, setLogin] = useState(true);
-const {backendUrl,setUser,setToken,setShowLogin} = useContext(AppContext);
+const {backendUrl,setUser,setToken,setShowLogin,loginUser} = useContext(AppContext);
 const [name,setUsername] = useState("");
 const [email,setEmail] = useState("");
 const [password,setPassword] = useState("");
@@ -25,8 +25,7 @@ const onSubmitHandler = async(e)=>{
         email,password
       })
       if(data.success){
-        setToken(data.token);
-        setUsername(data.user);
+        loginUser(data.token,data.user);
         setShowLogin(false);
         localStorage.setItem("tokens",data.token);
         navigate("/");
@@ -42,8 +41,7 @@ const onSubmitHandler = async(e)=>{
       console.log(data);
       
       if(data.success){
-        setToken(data.token);
-        setUsername(data.user);
+       loginUser(data.token,data.user);
         setShowLogin(false);
         localStorage.setItem("tokens",data.token);
         navigate("/");
