@@ -15,8 +15,11 @@ const CampaignIndividual = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="min-h-screen bg-gray-50">
+        <div className="min-h-40 bg-[#1A9E83] flex items-center justify-center">
+            <h1 className="text-4xl font-bold text-white">{campaign.name}</h1>
+        </div>
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
 
         {/* LEFT SECTION */}
         <div className="lg:col-span-2 space-y-6">
