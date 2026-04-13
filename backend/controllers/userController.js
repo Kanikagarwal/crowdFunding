@@ -1,6 +1,10 @@
  import userModel from "../models/userModel.js";
  import bcrypt from "bcrypt";
  import jwt  from "jsonwebtoken";
+import Razorpay from "razorpay";
+import razorpayInstance from "../config/razorpay.js";
+import Campaign from "../models/campaignModel.js";
+import crypto from "crypto";
 
  export const registerUser = async(req,res)=>{
     try {
@@ -47,3 +51,55 @@
         
     }
  }
+
+
+
+export const createOrder = async (req, res) => {
+  try {
+    const { amount } = req.body;
+
+    if (!amount || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid amount",
+      });
+    }
+
+    const options = {
+      amount: amount * 100,
+      currency: process.env.CURRENCY || "INR",
+      receipt: `receipt_${Date.now()}`,
+    };
+
+    const order = await razorpayInstance.orders.create(options);
+
+    res.status(200).json({
+      success: true,
+      order,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Order creation failed",
+    });
+  }
+};
+
+export const verifyPayment = async(req,res)=>{
+  try{
+    const {razorpay_order_id,razorpay_payment_id,razorpay_signature,campaignId,amount} = req.body;
+    const body = `${razorpay_order_id}|${razorpay_payment_id}`;
+    const expectedSignature = crypto.createHmac("sha256",process.env.RAZORPAY_KEY_SECRET).update(body.toString()).digest("hex");
+    if(expectedSignature === razorpay_signature){
+      await Campaign.findByIdAndUpdate(campaignId,{
+        $inc:{raised:amount}
+      });
+      return res.json({success:true})
+    }
+  }
+  catch(error){
+    console.log(error);
+    return res.json({success:false})
+  }
+}

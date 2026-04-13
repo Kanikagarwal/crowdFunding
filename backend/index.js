@@ -6,6 +6,7 @@ import userRouter from './routes/userRoutes.js';
 import organiserRouter from './routes/organiserRoutes.js';
 import campaignRouter from './routes/campaignRoutes.js';
 
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 const allowedOrigins = ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"];

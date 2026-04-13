@@ -90,7 +90,7 @@ const Navbar = () => {
 
                 {/* Username */}
                 <span className="hidden sm:inline">
-                  {organiserToken ? organiserName :  (user?user.name:"User")}
+                  {organiserToken ? organiserName :  (user?user:"User")}
                 </span>
                 
                 <svg

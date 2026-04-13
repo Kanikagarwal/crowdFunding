@@ -40,8 +40,8 @@ const AppContextProvider = ({ children }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
   // --- existing user states ---
-  const [token, setToken]           = useState(localStorage.getItem('tokens') || null)
-  const [user, setUser]             = useState(null)
+  const [token, setToken]           = useState(localStorage.getItem('userToken') || null)
+  const [user, setUser]             = useState(localStorage.getItem('userName') || '')
   const [showLogin, setShowLogin]   = useState(false)
 
   // --- NEW: organiser states ---
@@ -61,9 +61,11 @@ const AppContextProvider = ({ children }) => {
 
   const loginUser = (token, name) => {
     localStorage.setItem('userToken', token)
-    localStorage.setItem('userName', name)
+    console.log(name);
+    
+    localStorage.setItem('userName', name.name)
     setToken(token)
-    setUser(name)
+    setUser(name.name)
   }
 
   const logoutOrganiser = () => {

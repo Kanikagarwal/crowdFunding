@@ -1,7 +1,11 @@
 import React from "react";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const CampaignIndividual = () => {
+  const {backendUrl} = useContext(AppContext);
   const { state } = useLocation();
   const campaign = state?.campaign;
 
@@ -13,6 +17,36 @@ const CampaignIndividual = () => {
     100,
     Math.round((campaign.raised / campaign.goal) * 100)
   );
+
+  const handlePayment = async(amt,campaignId)=>{
+const {data} = await axios.post(`${backendUrl}/api/user/create-order`,{amount:amt});
+const order = data.order; 
+const options = {
+  key:import.meta.env.VITE_RAZORPAY_KEY_ID,
+  amount:order.amount,
+  currency:order.currency,
+  name:"FundFLow",
+  description:"Donation for campaign",
+  order_id:order.id,
+  handler:async function(response){
+    const verifyRes = await axios.post(`${backendUrl}/api/user/verify-payment`,{
+      ...response,
+      campaignId,
+      amount:amt
+    })
+    if(verifyRes.data.success){
+      alert("Donation successful! Thank you for your support.");
+    } else {
+      alert("Payment verification failed. Please contact support.");
+    }
+  },
+  theme:{
+    color:"#1A9E83"
+  }
+}
+const rzp = new window.Razorpay(options);
+    rzp.open();
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -85,7 +119,7 @@ const CampaignIndividual = () => {
             </div>
 
             {/* Donate Button */}
-            <button className="w-full bg-[#1A9E83] hover:bg-[#157a65] text-white py-3 rounded-lg font-medium transition">
+            <button onClick={()=>handlePayment(10,campaign._id)} className="w-full bg-[#1A9E83] hover:bg-[#157a65] text-white py-3 rounded-lg font-medium transition">
               Donate Now
             </button>
 
