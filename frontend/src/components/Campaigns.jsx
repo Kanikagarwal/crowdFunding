@@ -45,7 +45,7 @@ const Campaigns = () => {
     {/* Grid */}
     <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
-      {campaigns.map((item, i) => {
+      {campaigns.slice(0,6).map((item, i) => {
         const percentRaw = item.goal > 0 ? (item.raised / item.goal) * 100 : 0;
         const percent = Math.min(percentRaw, 100).toFixed(0) + "%";
         return(

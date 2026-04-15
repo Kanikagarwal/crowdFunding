@@ -78,7 +78,7 @@ const Dashboard = () => {
       )
 
       if (data.success) {
-        toast.success('Campaign add ho gayi!')
+        toast.success('Campaign Added Successfully')
         setForm({ title: '', category: '', desc: '', goal: '', days: '' })
         setFile(null)
         setActiveTab('my')
@@ -87,7 +87,7 @@ const Dashboard = () => {
       }
     } catch (error) {
       console.log("This is the error" + error.message);
-      toast.error('Kuch galat hua')
+      toast.error('Something went wrong')
     }
 
     setLoading(false)

@@ -38,7 +38,7 @@ const OrganiserLogin = () => {
         )
         if (data.success) {
           loginOrganiser(data.token, data.name)
-          toast.success('Account ban gaya! Welcome!')
+          toast.success('Registration successful!')
           navigate('/dashboard')
         } else {
           toast.error(data.message)

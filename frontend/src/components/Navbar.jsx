@@ -94,13 +94,13 @@ const location = useLocation();
                 {/* Avatar */}
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1A9E83] text-white">
                   <span className="font-semibold uppercase">
-                    {organiserToken ? organiserName?.charAt(0) : user.charAt(0) || "U"}
+                    {organiserToken ? organiserName?.charAt(0).toUpperCase() : user.charAt(0).toUpperCase() || "U"}
                   </span>
                 </div>
 
                 {/* Username */}
                 <span className="hidden sm:inline">
-                  {organiserToken ? organiserName :  (user?user:"User")}
+                  {organiserToken ? organiserName.substr(0,1).toUpperCase()+organiserName.substr(1).toLowerCase() :  (user?user.substr(0,1).toUpperCase()+user.substr(1).toLowerCase():"User")}
                 </span>
                 
                 <svg
