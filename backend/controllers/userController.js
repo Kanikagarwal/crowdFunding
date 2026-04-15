@@ -4,7 +4,7 @@
 import Razorpay from "razorpay";
 import razorpayInstance from "../config/razorpay.js";
 import Campaign from "../models/campaignModel.js";
-import crypto from "crypto";
+import crypto from "node:crypto";
 
  export const registerUser = async(req,res)=>{
     try {

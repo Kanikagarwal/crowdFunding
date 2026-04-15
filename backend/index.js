@@ -4,7 +4,7 @@ import "dotenv/config"
 import connectDB from './config/mongodb.js';
 import userRouter from './routes/userRoutes.js';
 import organiserRouter from './routes/organiserRoutes.js';
-import path from 'path';
+
 import campaignRouter from './routes/campaignRoutes.js';
 
 
