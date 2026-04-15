@@ -2,13 +2,19 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
+import { toast } from "react-toastify";
+import Navbar from "../components/Navbar";
 
 const CampaignIndividual = () => {
-  const { backendUrl } = useContext(AppContext);
+  const { backendUrl,token, organiserToken, setShowLogin } = useContext(AppContext);
   const { id } = useParams();
 
   const [campaign, setCampaign] = useState(null);
+const [amount, setAmount] = useState("");
+if(campaign){
+  var completed = campaign.raised >= campaign.goal || campaign.daysLeft <= 0; 
 
+}
   // 🔥 Fetch campaign
   const fetchCampaign = async () => {
     try {
@@ -25,11 +31,13 @@ const CampaignIndividual = () => {
 
   useEffect(() => {
     fetchCampaign();
+
   }, [id]);
 
   if (!campaign) {
     return <p className="text-center mt-10">Loading...</p>;
   }
+
 
   const percent = Math.min(
     100,
@@ -38,6 +46,19 @@ const CampaignIndividual = () => {
 
   // 💰 Payment Handler
   const handlePayment = async (amt) => {
+    if (!token && !organiserToken) {
+    setShowLogin(true);
+    toast.warning("Please login to donate");
+    return;
+  }
+if (campaign.raised >= campaign.goal) {
+  toast.info("This campaign is already completed 🎉");
+  return;
+}
+  if (!amt || amt <= 0) {
+    toast.error("Enter a valid amount");
+    return;
+  }
     try {
       const { data } = await axios.post(
         `${backendUrl}/api/user/create-order`,
@@ -59,7 +80,12 @@ const CampaignIndividual = () => {
               ...response,
               campaignId: campaign._id,
               amount: amt,
-            }
+            },
+            {
+    headers: {
+      Authorization: `Bearer ${token}`, // ✅ REQUIRED
+    },
+  }
           );
 
           if (verifyRes.data.success) {
@@ -85,7 +111,7 @@ const CampaignIndividual = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
+      <Navbar/>
       {/* Header */}
       <div className="min-h-40 bg-[#1A9E83] flex items-center justify-center">
         <h1 className="text-4xl font-bold text-white">{campaign.title}</h1>
@@ -155,11 +181,25 @@ const CampaignIndividual = () => {
               <span>{campaign.backers || 0} backers</span>
               <span>{campaign.daysLeft} days left</span>
             </div>
-
+            {/* Amount Input */}
+<div>
+  <label className="block text-sm font-medium text-gray-600 mb-1">
+    Enter Amount (₹)
+  </label>
+  <input
+    type="number"
+    value={amount}
+    onChange={(e) => setAmount(e.target.value)}
+    placeholder="Enter amount"
+    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1A9E83] outline-none"
+    min="1"
+  />
+</div>
             {/* Donate Button */}
             <button
-              onClick={() => handlePayment(10)}
-              className="w-full bg-[#1A9E83] hover:bg-[#157a65] text-white py-3 rounded-lg font-medium transition"
+            disabled={completed}
+              onClick={() => handlePayment(amount)}
+              className={`${completed ? 'bg-gray-500 hover:bg-gray-500' : 'bg-[#1A9E83] hover:bg-[#157a65]'} w-full bg-[#1A9E83] hover:bg-[#157a65] text-white py-3 rounded-lg font-medium transition`}
             >
               Donate Now
             </button>

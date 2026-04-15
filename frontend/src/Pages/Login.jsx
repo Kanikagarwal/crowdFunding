@@ -55,11 +55,6 @@ const onSubmitHandler = async(e)=>{
     
   }
 }
-
-
-
-
-
   return (
     <div className="min-h-screen flex justify-center items-center px-4 bg-gradient-to-br from-[#1A9E83]/5 via-[#1a9e83b4]/25 to-white">
       

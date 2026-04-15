@@ -53,20 +53,22 @@ export const login = async (req, res) => {
 export const createCampaign = async (req, res) => {
     try {
         const organiserId = req.organiserId; // from auth middleware
-        const { title, category, img, desc, goal, days } = req.body;
-        
-        if(!title || !category || !img || !desc || !goal || !days) {
+        const { title, category, desc, goal, days } = req.body;
+        if(!title || !category || !req.file || !desc || !goal || !days) {
             return res.json({success:false, message: "Missing Campaign details"});
         }
-
+        const imageURL = req.file.path; 
+console.log("BODY:", req.body);
+console.log("FILE:", req.file);
         const newCampaign = new campaignModel({
-            title, category, img, desc, goal, days, organiserId
+            title, category, img: imageURL, desc, goal, days, organiserId
         });
         await newCampaign.save();
         
         res.json({success: true, message: "Campaign created successfully"});
     } catch (error) {
-        console.log(error);
+        console.log("ERROR:", error.message);
+console.log("FULL ERROR:", error);
         res.json({success: false, message: "Server error creating campaign"});
     }
 }

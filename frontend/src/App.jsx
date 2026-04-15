@@ -23,7 +23,7 @@ function App() {
     <>
       <ToastContainer position='bottom-right' />
       <Routes>
-        <Route path="/"                 element={showLogin == true ? <Landing /> : <Home />} />
+        <Route path="/"                 element={<Home />} />
         <Route path="/login"            element={<Login />} />
         <Route path="/campaigns"        element={<Campaigns />} />
         <Route path="/all-campaigns"    element={<AllCampaigns />} />

@@ -1,27 +1,35 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const { organiserToken, organiserName, logoutOrganiser, token, setToken, setShowLogin, user } = useContext(AppContext);
+  const { organiserToken, organiserName, logoutOrganiser, token, setToken, setShowLogin, user, setUser } = useContext(AppContext);
   const navigate = useNavigate();
-
+const location = useLocation();
   const handleSearch = (e) => {
     if(e.key === 'Enter' && searchInput.trim() !== '') {
       navigate('/all-campaigns?search=' + encodeURIComponent(searchInput.trim()));
     }
   };
 
+  const handleLogin = () => {
+    setShowLogin(true);
+    navigate("/login")
+  }
+
   const handleLogout = () => {
     if (organiserToken) {
       logoutOrganiser();
-      navigate("/");
+      navigate("/",{replace:true});
     } else if (token) {
-      localStorage.removeItem("tokens");
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("userName");
       setToken(null);
-      navigate("/");
+      setUser('');
+      navigate("/",{replace:true});
     }
   };
 
@@ -38,28 +46,30 @@ const Navbar = () => {
         </Link>
 
         {/* Search Bar */}
-        <div className="relative mx-auto w-full max-w-md hidden sm:block">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
+        {!location.pathname.startsWith("/campaign") && (
+  <div className="relative mx-auto w-full max-w-md hidden sm:block">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+    </svg>
 
-          <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={handleSearch}
-            placeholder="Search campaigns..."
-            className="w-full h-10 pl-10 pr-3 rounded-md border border-gray-300 bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A9E83]"
-          />
-        </div>
+    <input
+      type="text"
+      value={searchInput}
+      onChange={(e) => setSearchInput(e.target.value)}
+      onKeyDown={handleSearch}
+      placeholder="Search campaigns..."
+      className="w-full h-10 pl-10 pr-3 rounded-md border border-gray-300 bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A9E83]"
+    />
+  </div>
+)}
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
@@ -151,7 +161,7 @@ const Navbar = () => {
                 Organiser Portal
               </Link>
               <button 
-                onClick={() => setShowLogin(true)}
+                onClick={handleLogin}
                 className="hidden sm:inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
               >
                 Login

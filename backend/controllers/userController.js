@@ -93,9 +93,22 @@ export const verifyPayment = async(req,res)=>{
     const expectedSignature = crypto.createHmac("sha256",process.env.RAZORPAY_KEY_SECRET).update(body.toString()).digest("hex");
   
     if(expectedSignature === razorpay_signature){
-      await Campaign.findByIdAndUpdate(campaignId,{
-        $inc: { raised: Number(amount), backers: 1 }
-      });
+      const campaign = await Campaign.findById(campaignId);
+
+// 💰 always increase amount
+campaign.raised += Number(amount);
+
+// 👤 check if user already donated
+const alreadyDonated = campaign.donors.some(
+  (donor) => donor.toString() === req.user.id.toString()
+);
+
+if (!alreadyDonated) {
+  campaign.donors.push(req.user.id);
+  campaign.backers += 1;
+}
+
+await campaign.save();
       return res.json({success:true})
     }
     else{

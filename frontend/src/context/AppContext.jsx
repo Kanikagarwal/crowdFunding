@@ -1,41 +1,12 @@
-// import React from 'react'
-// import { createContext, useEffect, useState } from 'react'
-// export const AppContext = createContext();
-
-
-
-// const AppContextProvider = (props) => {
-//     const [user,setUser] = useState(false);
-//     const [showLogin, setShowLogin] = useState(() => {
-//   return !localStorage.getItem("tokens"); 
-// });
-//     const [token,setToken] = useState(localStorage.getItem("tokens") || null);
-//     const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-//     const values = {
-//         user,
-//         setUser,
-//         showLogin,
-//         setShowLogin,
-//         token,
-//         setToken,
-//         backendUrl
-//     }
-//   return (
-//     <AppContext.Provider value={values}>
-//       {props.children}
-//     </AppContext.Provider>
-//   )
-// }
-
-// export default AppContextProvider
-
 
 import { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export const AppContext = createContext()
 
 const AppContextProvider = ({ children }) => {
+  const navigate = useNavigate()
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
