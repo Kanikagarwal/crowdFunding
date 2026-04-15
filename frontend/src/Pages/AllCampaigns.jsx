@@ -85,7 +85,7 @@ const AllCampaigns = () => {
         {loading ? (
           <div className="text-center py-20">Loading campaigns...</div>
         ) : (
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-4">
             {filteredCampaigns.map((item, i) => {
               const percentRaw = item.goal > 0 ? (item.raised / item.goal) * 100 : 0;
               const percent = Math.min(percentRaw, 100).toFixed(0) + "%";
@@ -102,7 +102,7 @@ const AllCampaigns = () => {
                   goal={item.goal}
                   raised={item.raised}
                   backers={item.backers}
-                  days={item.days}
+                  days={item.daysLeft}
                 />
               )
             })}

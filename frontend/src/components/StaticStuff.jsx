@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const StaticStuff = () => {
   return (
@@ -28,9 +29,9 @@ const StaticStuff = () => {
         </p>
 
         <div className="mt-8">
-          <button className="bg-[#1A9E83] text-white hover:bg-[#1A9E83]/90 h-11 rounded-full px-8 text-base font-semibold transition">
+          <Link to="/all-campaigns" className="p-4 bg-[#1A9E83] text-white hover:bg-[#1A9E83]/90 h-11 rounded-full px-8 text-base font-semibold transition">
             Explore Campaigns
-          </button>
+          </Link>
         </div>
 
       </div>

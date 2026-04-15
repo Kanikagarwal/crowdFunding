@@ -43,7 +43,7 @@ import crypto from "crypto";
         if(!isMatch){
             return res.json({success:false,message:"Wrong Password"});
         }
-        const token = jwt.sign({ide:user._id},process.env.JWT_SECRET);
+        const token = jwt.sign({id:user._id},process.env.JWT_SECRET);
         res.json({success:true,token,user:{name:user.name}});
     } catch (error) {
         console.log(error);
@@ -91,11 +91,15 @@ export const verifyPayment = async(req,res)=>{
     const {razorpay_order_id,razorpay_payment_id,razorpay_signature,campaignId,amount} = req.body;
     const body = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = crypto.createHmac("sha256",process.env.RAZORPAY_KEY_SECRET).update(body.toString()).digest("hex");
+  
     if(expectedSignature === razorpay_signature){
       await Campaign.findByIdAndUpdate(campaignId,{
-        $inc:{raised:amount}
+        $inc: { raised: Number(amount), backers: 1 }
       });
       return res.json({success:true})
+    }
+    else{
+      return res.json({success:false})
     }
   }
   catch(error){

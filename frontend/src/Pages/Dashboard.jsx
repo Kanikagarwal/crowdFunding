@@ -165,7 +165,7 @@ const Dashboard = () => {
                           <td className="px-6 py-4 text-gray-500">₹{camp.goal}</td>
                           <td className="px-6 py-4 text-[#1A9E83] font-semibold">₹{camp.raised}</td>
                           <td className="px-6 py-4 text-gray-500">{perc}%</td>
-                          <td className="px-6 py-4 text-gray-500">{camp.days}</td>
+                          <td className="px-6 py-4 text-gray-500">{camp.daysLeft}</td>
                         </tr>
                       )
                     })}

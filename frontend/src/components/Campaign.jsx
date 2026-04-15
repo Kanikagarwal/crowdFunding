@@ -9,7 +9,7 @@ const Campaign = ({ id,idx,img, category,percent, name, desc, goal, raised, back
             key={idx}
             className="group overflow-hidden rounded-2xl border border-gray-300 bg-white shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
           >
-            <Link to={`/campaign/${id}`} className="block" state={{campaign}}>
+            <Link to={`/campaign/${id}`} className="block">
             {/* Image */}
             <div className="aspect-video overflow-hidden bg-gray-100">
               <img

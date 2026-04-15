@@ -1,16 +1,34 @@
-import React from "react";
-import { useContext } from "react";
-import { AppContext } from "../context/AppContext";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
+import { AppContext } from "../context/AppContext";
 
 const CampaignIndividual = () => {
-  const {backendUrl} = useContext(AppContext);
-  const { state } = useLocation();
-  const campaign = state?.campaign;
+  const { backendUrl } = useContext(AppContext);
+  const { id } = useParams();
+
+  const [campaign, setCampaign] = useState(null);
+
+  // 🔥 Fetch campaign
+  const fetchCampaign = async () => {
+    try {
+      const { data } = await axios.get(
+        `${backendUrl}/api/campaigns/get-campaign/${id}`
+      );
+      if (data.success) {
+        setCampaign(data.campaign);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCampaign();
+  }, [id]);
 
   if (!campaign) {
-    return <p className="text-center mt-10">Campaign not found</p>;
+    return <p className="text-center mt-10">Loading...</p>;
   }
 
   const percent = Math.min(
@@ -18,41 +36,61 @@ const CampaignIndividual = () => {
     Math.round((campaign.raised / campaign.goal) * 100)
   );
 
-  const handlePayment = async(amt,campaignId)=>{
-const {data} = await axios.post(`${backendUrl}/api/user/create-order`,{amount:amt});
-const order = data.order; 
-const options = {
-  key:import.meta.env.VITE_RAZORPAY_KEY_ID,
-  amount:order.amount,
-  currency:order.currency,
-  name:"FundFLow",
-  description:"Donation for campaign",
-  order_id:order.id,
-  handler:async function(response){
-    const verifyRes = await axios.post(`${backendUrl}/api/user/verify-payment`,{
-      ...response,
-      campaignId,
-      amount:amt
-    })
-    if(verifyRes.data.success){
-      alert("Donation successful! Thank you for your support.");
-    } else {
-      alert("Payment verification failed. Please contact support.");
+  // 💰 Payment Handler
+  const handlePayment = async (amt) => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/create-order`,
+        { amount: amt }
+      );
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: "FundFlow",
+        description: "Donation for campaign",
+        order_id: data.order.id,
+
+        handler: async function (response) {
+          const verifyRes = await axios.post(
+            `${backendUrl}/api/user/verify-payment`,
+            {
+              ...response,
+              campaignId: campaign._id,
+              amount: amt,
+            }
+          );
+
+          if (verifyRes.data.success) {
+            alert("Donation successful! 🎉");
+            await fetchCampaign(); // ✅ refresh UI
+          } else {
+            alert("Payment verification failed");
+          }
+        },
+
+        theme: {
+          color: "#1A9E83",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+
+    } catch (error) {
+      console.log(error);
     }
-  },
-  theme:{
-    color:"#1A9E83"
-  }
-}
-const rzp = new window.Razorpay(options);
-    rzp.open();
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-        <div className="min-h-40 bg-[#1A9E83] flex items-center justify-center">
-            <h1 className="text-4xl font-bold text-white">{campaign.name}</h1>
-        </div>
+      
+      {/* Header */}
+      <div className="min-h-40 bg-[#1A9E83] flex items-center justify-center">
+        <h1 className="text-4xl font-bold text-white">{campaign.title}</h1>
+      </div>
+
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
 
         {/* LEFT SECTION */}
@@ -62,7 +100,7 @@ const rzp = new window.Razorpay(options);
           <div className="rounded-2xl overflow-hidden shadow">
             <img
               src={campaign.img}
-              alt={campaign.name}
+              alt={campaign.title}
               className="w-full h-[250px] sm:h-[400px] object-cover"
             />
           </div>
@@ -74,7 +112,7 @@ const rzp = new window.Razorpay(options);
             </span>
 
             <h1 className="text-2xl sm:text-3xl font-bold mt-3 text-gray-800">
-              {campaign.name}
+              {campaign.title}
             </h1>
           </div>
 
@@ -115,11 +153,14 @@ const rzp = new window.Razorpay(options);
             {/* Stats */}
             <div className="flex justify-between text-sm text-gray-600">
               <span>{campaign.backers || 0} backers</span>
-              <span>{campaign.days} days left</span>
+              <span>{campaign.daysLeft} days left</span>
             </div>
 
             {/* Donate Button */}
-            <button onClick={()=>handlePayment(10,campaign._id)} className="w-full bg-[#1A9E83] hover:bg-[#157a65] text-white py-3 rounded-lg font-medium transition">
+            <button
+              onClick={() => handlePayment(10)}
+              className="w-full bg-[#1A9E83] hover:bg-[#157a65] text-white py-3 rounded-lg font-medium transition"
+            >
               Donate Now
             </button>
 

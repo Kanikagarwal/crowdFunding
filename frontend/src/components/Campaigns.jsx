@@ -61,7 +61,7 @@ const Campaigns = () => {
             goal={item.goal}
             raised={item.raised}
             backers={item.backers}
-            days={item.days}
+            days={item.daysLeft}
           />
           </div>
         )

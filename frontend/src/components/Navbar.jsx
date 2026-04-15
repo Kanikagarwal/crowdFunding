@@ -84,7 +84,7 @@ const Navbar = () => {
                 {/* Avatar */}
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1A9E83] text-white">
                   <span className="font-semibold uppercase">
-                    {organiserToken ? organiserName?.charAt(0) : "U"}
+                    {organiserToken ? organiserName?.charAt(0) : user.charAt(0) || "U"}
                   </span>
                 </div>
 
