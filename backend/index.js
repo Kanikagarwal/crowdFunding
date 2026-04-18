@@ -16,10 +16,13 @@ app.use(express.json())
 // app.use("/uploads", express.static("uploads"));
 
 
+
+
 app.use(cors({
     origin:allowedOrigins,
     credentials:true,
 }))
+app.use(express.json())
 await connectDB();
 app.get("/",(req,res)=>{
     res.send("Hello World");
