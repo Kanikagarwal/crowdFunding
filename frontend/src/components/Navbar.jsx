@@ -162,7 +162,7 @@ const location = useLocation();
               </Link>
               <button 
                 onClick={handleLogin}
-                className="hidden sm:inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+                className="sm:inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
               >
                 Login
               </button>
