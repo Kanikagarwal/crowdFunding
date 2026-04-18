@@ -104,8 +104,8 @@ if (campaign.raised >= campaign.goal) {
       const rzp = new window.Razorpay(options);
       rzp.open();
 
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   };
 

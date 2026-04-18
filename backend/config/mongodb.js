@@ -5,7 +5,7 @@ const connectDB = async()=>{
         console.log("Database connected");
         
     })
-    await mongoose.connect(`${process.env.MONGOURL}/fundflow`)
+    await mongoose.connect(`${process.env.MONGO_URL}`)
 }
 
 export default connectDB;
