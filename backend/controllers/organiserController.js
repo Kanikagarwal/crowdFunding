@@ -68,7 +68,6 @@ console.log("FILE:", req.file);
         res.json({success: true, message: "Campaign created successfully"});
     } catch (error) {
         console.log("ERROR:", error.message);
-console.log("FULL ERROR:", error);
         res.json({success: false, message: "Server error creating campaign"});
     }
 }
