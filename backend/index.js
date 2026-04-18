@@ -10,16 +10,21 @@ import campaignRouter from './routes/campaignRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const allowedOrigins = ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175","https://crowd-funding-puce-kappa.vercel.app"];
+
+const allowedOrigins = ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175","https://crowd-funding-aiksnlpq0-kanika-s-projects-6427bb0e.vercel.app"];
+
 app.use(express.json())
 
 // app.use("/uploads", express.static("uploads"));
+
+
 
 
 app.use(cors({
     origin:allowedOrigins,
     credentials:true,
 }))
+app.use(express.json())
 await connectDB();
 app.get("/",(req,res)=>{
     res.send("Hello World");
