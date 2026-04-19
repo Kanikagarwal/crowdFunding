@@ -71,3 +71,42 @@ console.log("FILE:", req.file);
         res.json({success: false, message: "Server error creating campaign"});
     }
 }
+
+// delet campign
+export const deleteCampaign  = async (req, res) => {
+    try {
+        const organiserId = req.organiserId;
+        const { id } = req.params;
+
+        // find campaign
+        const campaign = await campaignModel.findById(id);
+
+        if(!campaign){
+            return res.json({
+                success : false,
+                message : "Campaign not found"
+            });
+        }
+        // only owner can delete the Campaign
+        if(campaign.organiserId.toString() !== organiserId.toString()){
+            return res,json({
+                success : false,
+                message : "unauthorised"
+            });
+        }
+
+        // delet campaign
+        await campaignModel.findByIdAndDelete(id);
+        res.json({
+            success : true,
+            message : "Campaign is delet successfully"
+        });
+    } catch(error) {
+        console.log(error);
+    res.json({
+      success: false,
+      message: "Server error deleting campaign"
+       });
+    }
+    
+}

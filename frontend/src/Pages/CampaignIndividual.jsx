@@ -1,26 +1,27 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
 import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 
 const CampaignIndividual = () => {
-  const { backendUrl,token, organiserToken, setShowLogin } = useContext(AppContext);
+  const { backendUrl, token, organiserToken, setShowLogin } =
+    useContext(AppContext);
+
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [campaign, setCampaign] = useState(null);
-const [amount, setAmount] = useState("");
-if(campaign){
-  var completed = campaign.raised >= campaign.goal || campaign.daysLeft <= 0; 
+  const [amount, setAmount] = useState("");
 
-}
-  // 🔥 Fetch campaign
+  // fetch campaign
   const fetchCampaign = async () => {
     try {
       const { data } = await axios.get(
         `${backendUrl}/api/campaigns/get-campaign/${id}`
       );
+
       if (data.success) {
         setCampaign(data.campaign);
       }
@@ -31,34 +32,40 @@ if(campaign){
 
   useEffect(() => {
     fetchCampaign();
-
   }, [id]);
 
   if (!campaign) {
     return <p className="text-center mt-10">Loading...</p>;
   }
 
+  const completed =
+    campaign.raised >= campaign.goal || campaign.daysLeft <= 0;
 
   const percent = Math.min(
     100,
     Math.round((campaign.raised / campaign.goal) * 100)
   );
 
-  // 💰 Payment Handler
+ 
+  // Donation Payment
+ 
   const handlePayment = async (amt) => {
     if (!token && !organiserToken) {
-    setShowLogin(true);
-    toast.warning("Please login to donate");
-    return;
-  }
-if (campaign.raised >= campaign.goal) {
-  toast.info("This campaign is already completed 🎉");
-  return;
-}
-  if (!amt || amt <= 0) {
-    toast.error("Enter a valid amount");
-    return;
-  }
+      setShowLogin(true);
+      toast.warning("Please login to donate");
+      return;
+    }
+
+    if (completed) {
+      toast.info("This campaign is already completed 🎉");
+      return;
+    }
+
+    if (!amt || amt <= 0) {
+      toast.error("Enter valid amount");
+      return;
+    }
+
     try {
       const { data } = await axios.post(
         `${backendUrl}/api/user/create-order`,
@@ -82,17 +89,17 @@ if (campaign.raised >= campaign.goal) {
               amount: amt,
             },
             {
-    headers: {
-      Authorization: `Bearer ${token}`, // ✅ REQUIRED
-    },
-  }
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
           );
 
           if (verifyRes.data.success) {
-            alert("Donation successful! 🎉");
-            await fetchCampaign(); // ✅ refresh UI
+            toast.success("Donation successful 🎉");
+            fetchCampaign();
           } else {
-            alert("Payment verification failed");
+            toast.error("Payment verification failed");
           }
         },
 
@@ -104,22 +111,52 @@ if (campaign.raised >= campaign.goal) {
       const rzp = new window.Razorpay(options);
       rzp.open();
 
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
+      toast.error("Payment failed");
     }
   };
 
+
+  // Delete Campaign
+
+  const handleDelete = async () => {
+  try {
+    const { data } = await axios.delete(
+      `${backendUrl}/api/campaigns/delete-campaign/${campaign._id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${organiserToken}`,
+        },
+      }
+    );
+
+    if (data.success) {
+      toast.success("Deleted");
+      navigate("/");
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Delete failed");
+  }
+};
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar/>
+      <Navbar />
+
       {/* Header */}
       <div className="min-h-40 bg-[#1A9E83] flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-white">{campaign.title}</h1>
+        <h1 className="text-4xl font-bold text-white">
+          {campaign.title}
+        </h1>
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
 
-        {/* LEFT SECTION */}
+        {/* Left */}
         <div className="lg:col-span-2 space-y-6">
 
           {/* Image */}
@@ -144,29 +181,33 @@ if (campaign.raised >= campaign.goal) {
 
           {/* Description */}
           <div className="bg-white p-5 rounded-xl shadow-sm">
-            <h2 className="text-lg font-semibold mb-2">About Campaign</h2>
+            <h2 className="text-lg font-semibold mb-2">
+              About Campaign
+            </h2>
+
             <p className="text-gray-600 leading-relaxed">
               {campaign.desc}
             </p>
           </div>
         </div>
 
-        {/* RIGHT SECTION */}
+        {/* Right */}
         <div className="space-y-6">
 
           <div className="bg-white p-6 rounded-2xl shadow-md space-y-4 sticky top-20">
 
-            {/* Amount */}
+            {/* Raised */}
             <div>
               <h2 className="text-2xl font-bold text-[#1A9E83]">
                 ₹{campaign.raised}
               </h2>
+
               <p className="text-gray-500 text-sm">
                 raised out of ₹{campaign.goal}
               </p>
             </div>
 
-            {/* Progress Bar */}
+            {/* Progress */}
             <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full bg-[#1A9E83]"
@@ -174,38 +215,56 @@ if (campaign.raised >= campaign.goal) {
               ></div>
             </div>
 
-            <p className="text-sm text-gray-500">{percent}% funded</p>
+            <p className="text-sm text-gray-500">
+              {percent}% funded
+            </p>
 
             {/* Stats */}
             <div className="flex justify-between text-sm text-gray-600">
               <span>{campaign.backers || 0} backers</span>
               <span>{campaign.daysLeft} days left</span>
             </div>
-            {/* Amount Input */}
-<div>
-  <label className="block text-sm font-medium text-gray-600 mb-1">
-    Enter Amount (₹)
-  </label>
-  <input
-    type="number"
-    value={amount}
-    onChange={(e) => setAmount(e.target.value)}
-    placeholder="Enter amount"
-    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1A9E83] outline-none"
-    min="1"
-  />
-</div>
-            {/* Donate Button */}
+
+            {/* Amount */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-1">
+                Enter Amount (₹)
+              </label>
+
+              <input
+                type="number"
+                min="1"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Enter amount"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1A9E83] outline-none"
+              />
+            </div>
+
+            {/* Donate */}
             <button
-            disabled={completed}
+              disabled={completed}
               onClick={() => handlePayment(amount)}
-              className={`${completed ? 'bg-gray-500 hover:bg-gray-500' : 'bg-[#1A9E83] hover:bg-[#157a65]'} w-full bg-[#1A9E83] hover:bg-[#157a65] text-white py-3 rounded-lg font-medium transition`}
+              className={`w-full text-white py-3 rounded-lg font-medium transition ${
+                completed
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-[#1A9E83] hover:bg-[#157a65]"
+              }`}
             >
-              Donate Now
+              {completed ? "Campaign Completed" : "Donate Now"}
             </button>
 
-          </div>
+            {/* Delete */}
+            {organiserToken && (
+              <button
+                onClick={handleDelete}
+                className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-medium transition"
+              >
+                Delete Campaign
+              </button>
+            )}
 
+          </div>
         </div>
       </div>
     </div>
