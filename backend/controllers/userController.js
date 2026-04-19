@@ -4,7 +4,9 @@
 import Razorpay from "razorpay";
 import razorpayInstance from "../config/razorpay.js";
 import Campaign from "../models/campaignModel.js";
+import Donation from "../models/donationModel.js";
 import crypto from "node:crypto";
+
 
  export const registerUser = async(req,res)=>{
     try {
@@ -109,6 +111,14 @@ if (!alreadyDonated) {
 }
 
 await campaign.save();
+await Donation.create({
+        userId: req.user.id,
+        campaignId,
+        amount,
+        paymentId: razorpay_payment_id,
+        orderId: razorpay_order_id,
+        status: "success"
+      });
       return res.json({success:true})
     }
     else{
@@ -120,3 +130,18 @@ await campaign.save();
     return res.json({success:false})
   }
 }
+
+export const getUserDonations = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const donations = await Donation.find({ userId })
+      .populate("campaignId", "title img")
+      .sort({ createdAt: -1 });
+
+    res.json({ success: true, donations });
+
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+};

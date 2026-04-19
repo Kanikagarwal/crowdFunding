@@ -1,45 +1,77 @@
 import React from "react";
+import axios from "axios";
+import { useEffect, useState, useContext } from "react";
 import Navbar from '../components/Navbar.jsx'
+import { AppContext } from "../context/AppContext.jsx";
 const History = () => {
+const [donations,setDonations] = useState([]);
+const [loading, setLoading] = useState(true);
+const {backendUrl} = useContext(AppContext);
+  const totalAmount = donations.reduce(
+  (acc, item) => acc + (item.amount || 0),
+  0
+);
 
-  // Dummy data (replace with API later)
-  const donations = [
-    {
-      _id: "1",
-      campaign: {
-        title: "Help Flood Victims",
-        img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac"
-      },
-      amount: 500,
-      status: "success",
-      createdAt: "2026-04-18T10:30:00"
-    },
-    {
-      _id: "2",
-      campaign: {
-        title: "Education for All",
-        img: "https://images.unsplash.com/photo-1509062522246-3755977927d7"
-      },
-      amount: 1200,
-      status: "pending",
-      createdAt: "2026-04-15T14:20:00"
-    },
-    {
-      _id: "3",
-      campaign: {
-        title: "Education for All",
-        img: "https://images.unsplash.com/photo-1509062522246-3755977927d7"
-      },
-      amount: 1200,
-      status: "pending",
-      createdAt: "2026-04-15T14:20:00"
+//  const fetchHistory = async () => {
+//   console.log("Fetching history...");
+//     try {
+//       const res = await axios.get(`${backendUrl}/api/user/history`, {
+//         headers: {
+//           token: localStorage.getItem("userToken")
+//         }
+//       });
+
+//       if (res.data.success) {
+//         console.log(res.data);
+        
+//         setDonations(res.data.donations);
+//       }
+//     } catch (err) {
+//       console.log(err);
+//     }
+//     finally {
+//     setLoading(false);
+//   }
+//   };
+const fetchHistory = async () => {
+  console.log("STEP 1: function called");
+
+  try {
+    console.log("STEP 2: before API");
+
+    const res = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/history`,
+      {
+         headers: {
+      Authorization: `Bearer ${localStorage.getItem("userToken")}`
     }
-  ];
+      }
+    );
 
-  const totalAmount = donations.reduce((acc, item) => acc + item.amount, 0);
+    console.log("STEP 3: API success", res.data);
 
+    if (res.data.success) {
+      setDonations(res.data.donations);
+    }
+
+  } catch (err) {
+    console.log("STEP 4: ERROR", err.response || err.message);
+  } finally {
+    console.log("STEP 5: finished");
+    setLoading(false);
+  }
+};
+  useEffect(() => {
+    fetchHistory();
+  }, []);
   return (
-    <div className="min-h-screen bg-gray-50 px-4 sm:px-8 py-6">
+    loading ? (
+      <div className="min-h-screen bg-gray-50 px-4 sm:px-8 py-6">
+        <Navbar/>
+        <p>Loading...</p>
+      </div>
+    ) : (
+      <div className="min-h-screen bg-gray-50 px-4 sm:px-8 py-6">
         <Navbar/>
       {/* Header */}
       <div className="max-w-5xl mx-auto mb-6 mt-6">
@@ -81,7 +113,7 @@ const History = () => {
               >
                 {/* Image */}
                 <img
-                  src={item.campaign.img}
+                  src={item.campaignId?.img}
                   alt=""
                   className="w-full sm:w-24 h-40 sm:h-24 object-cover rounded-lg"
                 />
@@ -89,7 +121,7 @@ const History = () => {
                 {/* Info */}
                 <div className="flex-1">
                   <h2 className="font-semibold text-gray-800 text-lg">
-                    {item.campaign.title}
+                    {item.campaignId?.title}
                   </h2>
 
                   <p className="text-sm text-gray-500 mt-1">
@@ -119,7 +151,7 @@ const History = () => {
         )}
       </div>
 
-    </div>
+    </div>)
   );
 };
 
