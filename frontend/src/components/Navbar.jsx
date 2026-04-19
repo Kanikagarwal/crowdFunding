@@ -46,7 +46,7 @@ const location = useLocation();
         </Link>
 
         {/* Search Bar */}
-        {!location.pathname.startsWith("/campaign") && (
+        {(!location.pathname.startsWith("/campaign") && !location.pathname.startsWith("/history")) && (
   <div className="relative mx-auto w-full max-w-md hidden sm:block">
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -131,6 +131,24 @@ const location = useLocation();
                        Dashboard
                      </Link>
                   )}
+                  <button 
+                    onClick={()=>navigate("/history")}
+                    className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4" 
+       viewBox="0 0 24 24" 
+       fill="none" 
+       stroke="currentColor" 
+       strokeWidth="2" 
+       strokeLinecap="round" 
+       strokeLinejoin="round">
+    <path d="M3 3v5h5" />
+    <path d="M3.05 13A9 9 0 1 0 6 6" />
+    <path d="M12 7v5l3 3" />
+  </svg>
+                    History
+                  </button>
                   <button 
                     onClick={handleLogout}
                     className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors cursor-pointer"

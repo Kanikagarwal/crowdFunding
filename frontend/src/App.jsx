@@ -15,6 +15,7 @@ import Dashboard from './Pages/Dashboard'                 // ← add
 import Campaigns from './components/Campaigns'            // ← add
 import AllCampaigns from './Pages/AllCampaigns'           // ← add
 import CampaignIndividual from './Pages/CampaignIndividual'
+import History from './Pages/History'
 
 function App() {
   const { showLogin } = useContext(AppContext);
@@ -30,6 +31,7 @@ function App() {
         <Route path="/campaign/:id"    element={<CampaignIndividual />} />
         <Route path="/organiser/login"  element={<OrganiserLogin />} />
         <Route path="/dashboard"        element={<Dashboard />} />
+        <Route path="/history"        element={<History />} />
       </Routes>
     </>
   )
