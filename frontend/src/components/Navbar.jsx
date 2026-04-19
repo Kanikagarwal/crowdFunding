@@ -35,7 +35,7 @@ const location = useLocation();
 
   return (
     <nav className="sticky top-0 z-50 border-b border-gray-200 bg-[#ffffff]/80 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
+      <div className="w-full flex h-16 items-center justify-between gap-4 px-4">
 
         {/* Logo */}
         <Link
@@ -47,7 +47,7 @@ const location = useLocation();
 
         {/* Search Bar */}
         {(!location.pathname.startsWith("/campaign") && !location.pathname.startsWith("/history")) && (
-  <div className="relative mx-auto w-full max-w-md hidden sm:block">
+  <div className="relative w-full max-w-md">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
@@ -72,17 +72,19 @@ const location = useLocation();
 )}
 
         {/* Right Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           
-          {/* Organiser Action */}
-          {organiserToken && (
-            <Link 
-              to="/dashboard" 
-              className="hidden sm:inline-flex items-center justify-center rounded-md bg-[#1A9E83] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#157a65] transition"
-            >
-              Add Campaign
-            </Link>
-          )}
+        {organiserToken && (
+  <Link
+    to="/dashboard"
+    className="flex items-center justify-center rounded-md bg-[#1A9E83] 
+    px-2 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm 
+    font-medium text-white shadow-sm hover:bg-[#157a65] transition"
+  >
+    Add Campaign
+  </Link>
+)}
+
 
           {/* Profile / Auth Buttons */}
           {(organiserToken || token) ? (
