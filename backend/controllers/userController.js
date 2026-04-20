@@ -6,6 +6,7 @@ import razorpayInstance from "../config/razorpay.js";
 import Campaign from "../models/campaignModel.js";
 import Donation from "../models/donationModel.js";
 import crypto from "node:crypto";
+import sendEmail from "../utils/sendEmail.js";
 
 
  export const registerUser = async(req,res)=>{
@@ -95,7 +96,7 @@ export const verifyPayment = async(req,res)=>{
     const expectedSignature = crypto.createHmac("sha256",process.env.RAZORPAY_KEY_SECRET).update(body.toString()).digest("hex");
   
     if(expectedSignature === razorpay_signature){
-      const campaign = await Campaign.findById(campaignId);
+      const campaign = await Campaign.findById(campaignId).populate("organiserId");
 
 // 💰 always increase amount
 campaign.raised += Number(amount);
@@ -119,6 +120,21 @@ await Donation.create({
         orderId: razorpay_order_id,
         status: "success"
       });
+
+      await sendEmail(
+      campaign.organiserId.email,
+      "New Donation Received 🎉",
+      `Hello ${campaign.organiserId.name},
+
+You have received a new donation!
+
+Campaign: ${campaign.title}
+Amount: ₹${amount}
+
+Check your dashboard for details 🚀`
+    );
+
+
       return res.json({success:true})
     }
     else{
