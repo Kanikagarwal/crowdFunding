@@ -60,7 +60,7 @@ const OrganiserLogin = () => {
           {isLogin ? 'Organiser Login' : 'Organiser Register'}
         </h2>
         <p className="text-center text-sm text-gray-400 mb-6">
-          {isLogin ? 'Apne organiser account mein login karein' : 'Naya organiser account banayein'}
+          {isLogin ? 'Please log in to your organizer account.' : 'Create a new organizer account.'}
         </p>
 
         <form onSubmit={onSubmitHandler}>
@@ -109,7 +109,7 @@ const OrganiserLogin = () => {
           </button>
 
           <p className="text-center mt-3 text-sm">
-            {isLogin ? "Account nahi hai? " : "Pehle se account hai? "}
+            {isLogin ? "Don't have an account? " : "Already have an account? "}
             <span
               onClick={() => setIsLogin(!isLogin)}
               className="cursor-pointer text-[#1A9E83] underline"
