@@ -1,42 +1,97 @@
-import express from 'express';
+// import express from 'express';
+// import cors from "cors";
+// import "dotenv/config"
+// import connectDB from './config/mongodb.js';
+// import userRouter from './routes/userRoutes.js';
+// import organiserRouter from './routes/organiserRoutes.js';
+
+// import campaignRouter from './routes/campaignRoutes.js';
+
+
+// const app = express();
+// const PORT = process.env.PORT || 5000;
+
+// const allowedOrigins = ["http://localhost:5173","https://crowd-funding-puce-kappa.vercel.app"];
+
+// app.use(cors({
+//     origin:allowedOrigins,
+//     credentials:true,
+// }))
+// app.use(express.json())
+// await connectDB();
+// app.get("/",(req,res)=>{
+//     res.send("Hello World");
+    
+// })
+
+// app.use("/api/user",userRouter);
+// app.use("/api/organiser", organiserRouter);
+// app.use("/api/campaigns", campaignRouter);
+
+// app.listen(PORT,()=>{
+//     console.log(`Server is running on ${PORT}`);
+// })
+// app.use((err, req, res, next) => {
+//   console.log("GLOBAL ERROR:", err);
+//   console.log("MESSAGE:", err.message);
+
+//   res.status(500).json({
+//     success: false,
+//     message: err.message || "Something went wrong",
+//   });
+// });
+
+import express from "express";
 import cors from "cors";
-import "dotenv/config"
-import connectDB from './config/mongodb.js';
-import userRouter from './routes/userRoutes.js';
-import organiserRouter from './routes/organiserRoutes.js';
+import "dotenv/config";
 
-import campaignRouter from './routes/campaignRoutes.js';
-
+import connectDB from "./config/mongodb.js";
+import userRouter from "./routes/userRoutes.js";
+import organiserRouter from "./routes/organiserRoutes.js";
+import campaignRouter from "./routes/campaignRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = ["http://localhost:5173","https://crowd-funding-puce-kappa.vercel.app"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://crowd-funding-puce-kappa.vercel.app"
+];
 
 app.use(cors({
-    origin:allowedOrigins,
-    credentials:true,
-}))
-app.use(express.json())
-await connectDB();
-app.get("/",(req,res)=>{
-    res.send("Hello World");
-    
-})
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Blocked by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"]
+}));
 
-app.use("/api/user",userRouter);
+
+
+app.use(express.json());
+
+await connectDB();
+
+app.get("/", (req,res)=>{
+  res.send("Hello World");
+});
+
+app.use("/api/user", userRouter);
 app.use("/api/organiser", organiserRouter);
 app.use("/api/campaigns", campaignRouter);
 
-app.listen(PORT,()=>{
-    console.log(`Server is running on ${PORT}`);
-})
 app.use((err, req, res, next) => {
-  console.log("GLOBAL ERROR:", err);
-  console.log("MESSAGE:", err.message);
-
   res.status(500).json({
-    success: false,
-    message: err.message || "Something went wrong",
+    success:false,
+    message: err.message
   });
+});
+
+app.listen(PORT, ()=>{
+  console.log(`Server running on ${PORT}`);
 });
