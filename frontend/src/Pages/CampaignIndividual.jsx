@@ -144,131 +144,136 @@ const CampaignIndividual = () => {
 };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
+  <div className="min-h-screen bg-gray-50">
+    <Navbar />
 
-      {/* Header */}
-      <div className="min-h-40 bg-[#1A9E83] flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-white">
-          {campaign.title}
-        </h1>
+    {/* Header */}
+    <div className="min-h-32 sm:min-h-40 bg-[#1A9E83] flex items-center justify-center">
+      <h1 className="text-2xl sm:text-4xl font-bold text-white text-center px-4">
+        {campaign.title}
+      </h1>
+    </div>
+
+    {/* Main Layout */}
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-6 py-6 sm:py-8">
+
+      {/* Left Side */}
+      <div className="lg:col-span-2 space-y-6">
+
+        {/* Image */}
+        <div className="rounded-2xl overflow-hidden shadow bg-white">
+          <img
+            src={campaign.img}
+            alt={campaign.title}
+            className="w-full h-56 sm:h-80 md:h-[400px] object-cover"
+            onError={(e) => {
+              e.target.src =
+                "https://via.placeholder.com/800x500?text=Campaign+Image";
+            }}
+          />
+        </div>
+
+        {/* Category + Title */}
+        <div>
+          <span className="inline-block bg-[#1A9E83]/10 text-[#1A9E83] px-3 py-1 rounded-full text-sm">
+            {campaign.category}
+          </span>
+
+          <h1 className="text-xl sm:text-3xl font-bold mt-3 text-gray-800 leading-tight">
+            {campaign.title}
+          </h1>
+        </div>
+
+        {/* Description */}
+        <div className="bg-white p-4 sm:p-5 rounded-xl shadow-sm">
+          <h2 className="text-lg font-semibold mb-2">
+            About Campaign
+          </h2>
+
+          <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+            {campaign.desc}
+          </p>
+        </div>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
+      {/* Right Side */}
+      <div className="space-y-6">
 
-        {/* Left */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-md space-y-4 lg:sticky lg:top-20">
 
-          {/* Image */}
-          <div className="rounded-2xl overflow-hidden shadow">
-            <img
-              src={campaign.img}
-              alt={campaign.title}
-              className="w-full h-[250px] sm:h-[400px] object-cover"
+          {/* Raised */}
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1A9E83]">
+              ₹{campaign.raised}
+            </h2>
+
+            <p className="text-gray-500 text-sm">
+              raised out of ₹{campaign.goal}
+            </p>
+          </div>
+
+          {/* Progress */}
+          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#1A9E83]"
+              style={{ width: `${percent}%` }}
+            ></div>
+          </div>
+
+          <p className="text-sm text-gray-500">
+            {percent}% funded
+          </p>
+
+          {/* Stats */}
+          <div className="flex justify-between text-xs sm:text-sm text-gray-600">
+            <span>{campaign.backers || 0} backers</span>
+            <span>{campaign.daysLeft} days left</span>
+          </div>
+
+          {/* Amount */}
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Enter Amount (₹)
+            </label>
+
+            <input
+              type="number"
+              min="1"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="Enter amount"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1A9E83] outline-none"
             />
           </div>
 
-          {/* Title */}
-          <div>
-            <span className="inline-block bg-[#1A9E83]/10 text-[#1A9E83] px-3 py-1 rounded-full text-sm">
-              {campaign.category}
-            </span>
+          {/* Donate Button */}
+          <button
+            disabled={completed}
+            onClick={() => handlePayment(amount)}
+            className={`w-full text-white py-3 sm:py-3.5 rounded-lg text-sm sm:text-base font-medium transition ${
+              completed
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-[#1A9E83] hover:bg-[#157a65]"
+            }`}
+          >
+            {completed ? "Campaign Completed" : "Donate Now"}
+          </button>
 
-            <h1 className="text-2xl sm:text-3xl font-bold mt-3 text-gray-800">
-              {campaign.title}
-            </h1>
-          </div>
-
-          {/* Description */}
-          <div className="bg-white p-5 rounded-xl shadow-sm">
-            <h2 className="text-lg font-semibold mb-2">
-              About Campaign
-            </h2>
-
-            <p className="text-gray-600 leading-relaxed">
-              {campaign.desc}
-            </p>
-          </div>
-        </div>
-
-        {/* Right */}
-        <div className="space-y-6">
-
-          <div className="bg-white p-6 rounded-2xl shadow-md space-y-4 sticky top-20">
-
-            {/* Raised */}
-            <div>
-              <h2 className="text-2xl font-bold text-[#1A9E83]">
-                ₹{campaign.raised}
-              </h2>
-
-              <p className="text-gray-500 text-sm">
-                raised out of ₹{campaign.goal}
-              </p>
-            </div>
-
-            {/* Progress */}
-            <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#1A9E83]"
-                style={{ width: `${percent}%` }}
-              ></div>
-            </div>
-
-            <p className="text-sm text-gray-500">
-              {percent}% funded
-            </p>
-
-            {/* Stats */}
-            <div className="flex justify-between text-sm text-gray-600">
-              <span>{campaign.backers || 0} backers</span>
-              <span>{campaign.daysLeft} days left</span>
-            </div>
-
-            {/* Amount */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-1">
-                Enter Amount (₹)
-              </label>
-
-              <input
-                type="number"
-                min="1"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="Enter amount"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1A9E83] outline-none"
-              />
-            </div>
-
-            {/* Donate */}
+          {/* Delete Button */}
+          {organiserToken && (
             <button
-              disabled={completed}
-              onClick={() => handlePayment(amount)}
-              className={`w-full text-white py-3 rounded-lg font-medium transition ${
-                completed
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-[#1A9E83] hover:bg-[#157a65]"
-              }`}
+              onClick={handleDelete}
+              className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg text-sm sm:text-base font-medium transition"
             >
-              {completed ? "Campaign Completed" : "Donate Now"}
+              Delete Campaign
             </button>
+          )}
 
-            {/* Delete */}
-            {organiserToken && (
-              <button
-                onClick={handleDelete}
-                className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-medium transition"
-              >
-                Delete Campaign
-              </button>
-            )}
-
-          </div>
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
+}
 
 export default CampaignIndividual;
