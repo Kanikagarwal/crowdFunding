@@ -121,3 +121,46 @@ export const deleteCampaign = async (req, res) => {
     });
   }
 };
+
+// Like button
+export const toggleLikeCampaign = async (req, res) => {
+  try {
+    const campaignId = req.params.id;
+    const userId = req.body.userId;
+
+    const campaign = await campaignModel.findById(campaignId);
+
+    if (!campaign) {
+      return res.json({
+        success: false,
+        message: "Campaign not found"
+      });
+    }
+
+    const alreadyLiked = campaign.likes.some(
+      (id) => id.toString() === userId
+    );
+
+    if (alreadyLiked) {
+      campaign.likes = campaign.likes.filter(
+        (id) => id.toString() !== userId
+      );
+    } else {
+      campaign.likes.push(userId);
+    }
+
+    await campaign.save();
+
+    res.json({
+      success: true,
+      liked: !alreadyLiked,
+      likeCount: campaign.likes.length
+    });
+
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message
+    });
+  }
+};
