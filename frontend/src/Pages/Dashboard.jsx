@@ -93,6 +93,34 @@ const Dashboard = () => {
     setLoading(false)
   }
 
+
+  const handleDelete = async (camp) => {
+    const id  = camp._id;
+    try{
+      const { data } = await axios.delete(`${backendUrl}/api/campaigns/delete-campaign/${id}`, {
+  headers: {
+    Authorization: `Bearer ${organiserToken}`,
+  },
+});
+if (data.success) {
+      toast.success("Campaign deleted");
+
+      // 🔥 THIS LINE FIXES YOUR ISSUE
+      setMyCampaigns((prev) =>
+        prev.filter((c) => c._id !== id)
+      );
+
+    } else {
+      toast.error(data.message);
+    }
+    }
+    catch(error){
+      console.log(error);
+    }
+    
+    console.log(camp);
+    
+    }
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
@@ -241,6 +269,20 @@ const Dashboard = () => {
                           <td className="px-6 py-4 text-[#1A9E83] font-semibold">₹{camp.raised}</td>
                           <td className="px-6 py-4 text-gray-500">{perc}%</td>
                           <td className="px-6 py-4 text-gray-500">{camp.daysLeft}</td>
+                          <td className="px-6 py-4 text-red-300 cursor-pointer" onClick={() => handleDelete(camp)}><svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-5 h-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M3 6h18M8 6V4h8v2m-9 0l1 14h8l1-14M10 11v6M14 11v6"
+    />
+  </svg></td>
                         </tr>
                       )
                     })}
