@@ -158,13 +158,13 @@ const handleLike = async () => {
   <span>{likesCount}</span>
 </button>
 
-  <Link
+  {/* <Link
     to={`/campaign/${id}`}
     className="flex items-center gap-2 hover:text-blue-500 transition font-medium"
   >
     <span className="text-xl">💬</span>
     <span>{comments.length}</span>
-  </Link>
+  </Link> */}
 
   <button
     onClick={handleShare}
