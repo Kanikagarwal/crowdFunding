@@ -2,32 +2,39 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import useScrollReveal from "../hooks/useScrollReveal";
 
 const Landing = () => {
   const navigate = useNavigate();
-  const onUserClick = ()=>{
+  const onUserClick = () => {
     navigate("/login");
-  }
+  };
+  const heroRef = useScrollReveal();
+  const statsRef = useScrollReveal();
+  const featuresRef = useScrollReveal();
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-[#16171d]">
       <Navbar />
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#1A9E83]/5 via-[#1a9e84b4]/25 to-white py-16 md:py-32">
-      {/* <h1 className="top-heading text-center text-6xl md:text-3xl">Welcome to FundFlow</h1> */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#1A9E83]/5 via-[#1a9e84b4]/25 to-white dark:from-[#16171d] dark:via-[#1a2e29] dark:to-[#16171d] py-16 md:py-32">
+        {/* <h1 className="top-heading text-center text-6xl md:text-3xl">Welcome to FundFlow</h1> */}
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
           {/* LEFT CONTENT */}
-          <div className="flex-1 space-y-8 text-center md:text-left">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground leading-tight">
+          <div ref={heroRef} className="flex-1 space-y-8 text-center md:text-left">
+            <h1 className="reveal text-4xl md:text-6xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-tight">
               Bring Your <span className="text-[#1A9E83]">Ideas</span> to Life
             </h1>
 
-            <p className="text-xl md:text-xl text-gray-500 max-w-lg mx-auto md:mx-0">
+            <p className="reveal reveal-delay-1 text-xl md:text-xl text-gray-500 dark:text-gray-400 max-w-lg mx-auto md:mx-0">
               Join a community of dreamers and backers. Fund projects that
               matter, or launch your own campaign in minutes.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+            <div className="reveal reveal-delay-2 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               {/* USER DASHBOARD BUTTON */}
-              <button onClick={onUserClick} className="inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-[#1A9E83] text-[#FFFFFF] hover:bg-[#1A9E83]/90 h-11 text-base gap-2 px-8 py-6 rounded-xl shadow-lg shadow-[#1A9E83]/25 hover:shadow-xl hover:shadow-[#1A9E83]/30 transition-all">
+              <button
+                onClick={onUserClick}
+                className="inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-[#1A9E83] text-[#FFFFFF] hover:bg-[#1A9E83]/90 h-11 text-base gap-2 px-8 py-6 rounded-xl shadow-lg shadow-[#1A9E83]/25 hover:shadow-xl hover:shadow-[#1A9E83]/30 transition-all"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -47,7 +54,10 @@ const Landing = () => {
               </button>
 
               {/* ADD CAMPAIGN BUTTON */}
-              <Link to="/dashboard" className="inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-[#F68C25] text-[#FFFFFF] hover:bg-[#F68C25]/90 h-11 text-base gap-2 px-8 py-6 rounded-xl shadow-lg shadow-[#F68C25]/25 hover:shadow-xl hover:shadow-[#F68C25]/30 transition-all">
+              <Link
+                to="/dashboard"
+                className="inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-[#F68C25] text-[#FFFFFF] hover:bg-[#F68C25]/90 h-11 text-base gap-2 px-8 py-6 rounded-xl shadow-lg shadow-[#F68C25]/25 hover:shadow-xl hover:shadow-[#F68C25]/30 transition-all"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -87,38 +97,38 @@ const Landing = () => {
       </section>
 
       <section className="py-16 bg-[#1A9E83] text-white">
-        <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div className="text-center space-y-2">
+        <div ref={statsRef} className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="reveal reveal-delay-1 text-center space-y-2">
             <p className="text-3xl md:text-4xl font-bold">12,400+</p>
             <p className="text-sm md:text-base opacity-80">Campaigns Funded</p>
           </div>
-          <div className="text-center space-y-2">
+          <div className="reveal reveal-delay-2 text-center space-y-2">
             <p className="text-3xl md:text-4xl font-bold">$85M+</p>
             <p className="text-sm md:text-base opacity-80">Total Raised</p>
           </div>
-          <div className="text-center space-y-2">
+          <div className="reveal reveal-delay-3 text-center space-y-2">
             <p className="text-3xl md:text-4xl font-bold">320K+</p>
             <p className="text-sm md:text-base opacity-80">Happy Backers</p>
           </div>
-          <div className="text-center space-y-2">
+          <div className="reveal reveal-delay-4 text-center space-y-2">
             <p className="text-3xl md:text-4xl font-bold">98%</p>
             <p className="text-sm md:text-base opacity-80">Success Rate</p>
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-white dark:bg-[#16171d]">
         <div className="container mx-auto px-4 text-center space-y-12">
           <div className="space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
               Why Choose Us
             </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">
+            <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
               Everything you need to bring your project from idea to reality.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="rounded-lg border bg-white text-gray-900 shadow-sm group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-gray-100">
+          <div ref={featuresRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="reveal reveal-delay-1 rounded-lg border bg-white text-gray-900 shadow-sm group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-gray-100 dark:bg-[#1f2028] dark:text-gray-100 dark:border-gray-700">
               <div className="flex flex-col p-6 items-center text-center space-y-4">
                 <div className="w-14 h-14 rounded-xl bg-[#1A9E83]/10 flex items-center justify-center group-hover:bg-[#1A9E83] group-hover:text-[#ffffff] transition-colors">
                   <svg
@@ -139,12 +149,12 @@ const Landing = () => {
                 <h3 className="font-semibold tracking-tight text-lg">
                   Launch Fast
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Set up your campaign in minutes with our intuitive tools.
                 </p>
               </div>
             </div>
-            <div className="rounded-lg border bg-white text-gray-900 shadow-sm group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-gray-100">
+            <div className="reveal reveal-delay-2 rounded-lg border bg-white text-gray-900 shadow-sm group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-gray-100 dark:bg-[#1f2028] dark:text-gray-100 dark:border-gray-700">
               <div className="flex flex-col p-6 items-center text-center space-y-4">
                 <div className="w-14 h-14 rounded-xl bg-[#1A9E83]/10 flex items-center justify-center group-hover:bg-[#1A9E83] group-hover:text-[#ffffff] transition-colors">
                   <svg
@@ -165,12 +175,12 @@ const Landing = () => {
                 <h3 className="font-semibold tracking-tight text-lg">
                   Secure &amp; Trusted
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Bank-level security protects every transaction.
                 </p>
               </div>
             </div>
-            <div className="rounded-lg border bg-white text-gray-900 shadow-sm group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-gray-100">
+            <div className="reveal reveal-delay-3 rounded-lg border bg-white text-gray-900 shadow-sm group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-gray-100 dark:bg-[#1f2028] dark:text-gray-100 dark:border-gray-700">
               <div className="flex flex-col p-6 items-center text-center space-y-4">
                 <div className="w-14 h-14 rounded-xl bg-[#1A9E83]/10 flex items-center justify-center group-hover:bg-[#1A9E83] group-hover:text-[#ffffff] transition-colors">
                   <svg
@@ -191,12 +201,12 @@ const Landing = () => {
                 <h3 className="font-semibold tracking-tight text-lg">
                   Community Driven
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Connect with backers who believe in your vision.
                 </p>
               </div>
             </div>
-            <div className="rounded-lg border bg-white text-gray-900 shadow-sm group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-gray-100">
+            <div className="reveal reveal-delay-4 rounded-lg border bg-white text-gray-900 shadow-sm group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-gray-100 dark:bg-[#1f2028] dark:text-gray-100 dark:border-gray-700">
               <div className="flex flex-col p-6 items-center text-center space-y-4">
                 <div className="w-14 h-14 rounded-xl bg-[#1A9E83]/10 flex items-center justify-center group-hover:bg-[#1A9E83] group-hover:text-[#ffffff] transition-colors">
                   <svg
@@ -218,7 +228,7 @@ const Landing = () => {
                 <h3 className="font-semibold tracking-tight text-lg">
                   Track Progress
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Real-time analytics to monitor your campaign growth.
                 </p>
               </div>
@@ -226,7 +236,7 @@ const Landing = () => {
           </div>
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

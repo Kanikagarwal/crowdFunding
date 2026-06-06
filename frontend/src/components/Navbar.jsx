@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
+import ThemeToggle from './ThemeToggle';
 // import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
@@ -50,13 +51,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-[#ffffff]/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-[#ffffff]/80 backdrop-blur-md dark:border-gray-700 dark:bg-[#16171d]/80">
       <div className="w-full flex h-16 items-center justify-between gap-4 px-4">
 
         {/* Logo */}
         <Link
           to="/"
-          className="flex-shrink-0 text-xl font-bold text-[#1A9E83]"
+          className="shrink-0 text-xl font-bold text-[#1A9E83]"
         >
           FundFlow
         </Link>
@@ -67,7 +68,7 @@ const Navbar = () => {
             <div className="relative w-full max-w-md">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+                className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -83,13 +84,15 @@ const Navbar = () => {
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyDown={handleSearch}
                 placeholder="Search campaigns..."
-                className="w-full h-10 pl-10 pr-3 rounded-md border border-gray-300 bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A9E83]"
+                className="w-full h-10 pl-10 pr-3 rounded-md border border-gray-300 bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A9E83] dark:border-gray-600 dark:bg-[#1a1b22] dark:text-gray-200 dark:placeholder-gray-500"
               />
             </div>
           )}
 
         {/* Right Actions */}
         <div className="flex items-center gap-2">
+
+          <ThemeToggle />
 
           {organiserToken && (
             <Link
@@ -104,7 +107,7 @@ const Navbar = () => {
             <div className="relative">
               <button
                 onClick={() => setOpen(!open)}
-                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100"
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1A9E83] text-white">
                   <span className="font-semibold uppercase">
@@ -122,7 +125,7 @@ const Navbar = () => {
 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5 text-gray-500"
+                  className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -139,13 +142,13 @@ const Navbar = () => {
                     onClick={() => setOpen(false)}
                   ></div>
 
-                  <div className="absolute right-0 top-full mt-2 w-48 rounded-lg bg-white shadow-lg border border-gray-100 p-1 z-50">
+                  <div className="absolute right-0 top-full mt-2 w-48 rounded-lg bg-white shadow-lg border border-gray-100 p-1 z-50 dark:bg-[#1f2028] dark:border-gray-700 dark:shadow-gray-900/30">
 
                     {organiserToken && (
                       <Link
                         to="/dashboard"
                         onClick={() => setOpen(false)}
-                        className="sm:hidden flex w-full px-3 py-2 text-sm hover:bg-gray-50 rounded-md"
+                        className="sm:hidden flex w-full px-3 py-2 text-sm hover:bg-gray-50 rounded-md dark:hover:bg-gray-700 dark:text-gray-300"
                       >
                         Dashboard
                       </Link>
@@ -153,14 +156,14 @@ const Navbar = () => {
 
                     <button
                       onClick={() => navigate("/history")}
-                      className="flex w-full px-3 py-2 text-sm hover:bg-gray-50 rounded-md"
+                      className="flex w-full px-3 py-2 text-sm hover:bg-gray-50 rounded-md dark:hover:bg-gray-700 dark:text-gray-300"
                     >
                       History
                     </button>
 
                     <button
                       onClick={handleLogout}
-                      className="flex w-full px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-md"
+                      className="flex w-full px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-md dark:text-red-400 dark:hover:bg-red-900/20"
                     >
                       Logout
                     </button>
@@ -176,14 +179,14 @@ const Navbar = () => {
               <div className="hidden sm:flex items-center gap-2">
                 <Link
                   to="/organiser/login"
-                  className="text-sm font-medium text-gray-600 hover:text-[#1A9E83] px-3 py-2"
+                  className="text-sm font-medium text-gray-600 hover:text-[#1A9E83] px-3 py-2 dark:text-gray-400"
                 >
                   Organiser Portal
                 </Link>
 
                 <button
                   onClick={handleLogin}
-                  className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-[#1f2028] dark:text-gray-300 dark:hover:bg-gray-700"
                 >
                   Login
                 </button>
@@ -192,7 +195,7 @@ const Navbar = () => {
               {/* Mobile Menu */}
               <button
                 onClick={() => setMobileMenu(!mobileMenu)}
-                className="sm:hidden inline-flex items-center justify-center rounded-md border border-gray-300 bg-white p-2"
+                className="sm:hidden inline-flex items-center justify-center rounded-md border border-gray-300 bg-white p-2 dark:border-gray-600 dark:bg-[#1f2028] dark:text-gray-300"
               >
                 {mobileMenu ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
@@ -204,12 +207,12 @@ const Navbar = () => {
               </button>
 
               {mobileMenu && (
-                <div className="absolute right-0 top-12 z-50 w-52 rounded-xl border border-gray-200 bg-white p-2 shadow-lg sm:hidden">
+                <div className="absolute right-0 top-12 z-50 w-52 rounded-xl border border-gray-200 bg-white p-2 shadow-lg sm:hidden dark:border-gray-700 dark:bg-[#1f2028]">
 
                   <Link
                     to="/organiser/login"
                     onClick={() => setMobileMenu(false)}
-                    className="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                   >
                     Organiser Portal
                   </Link>
@@ -219,7 +222,7 @@ const Navbar = () => {
                       handleLogin();
                       setMobileMenu(false);
                     }}
-                    className="mt-1 w-full rounded-md px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                    className="mt-1 w-full rounded-md px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                   >
                     Login
                   </button>

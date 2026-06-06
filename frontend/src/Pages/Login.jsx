@@ -1,93 +1,89 @@
-import React, { use, useState } from 'react';
-import { useContext } from 'react';
-import { AppContext } from '../context/AppContext';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import React, { use, useState } from "react";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [login, setLogin] = useState(true);
-const {backendUrl,setUser,setToken,setShowLogin,loginUser} = useContext(AppContext);
-const [name,setUsername] = useState("");
-const [email,setEmail] = useState("");
-const [password,setPassword] = useState("");
-const navigate = useNavigate();
-const onSubmitHandler = async(e)=>{
-  e.preventDefault();
-  try {
-    console.log(name);
-    console.log(password);
-    console.log(email);
-    
-    
-    
-    if(login){
-      const {data} = await axios.post(`${backendUrl}/api/user/login`,{
-        email,password
-      })
-      if(data.success){
-        loginUser(data.token,data.user);
-        setShowLogin(false);
-        localStorage.setItem("tokens",data.token);
-        navigate("/");
+  const { backendUrl, setUser, setToken, setShowLogin, loginUser } =
+    useContext(AppContext);
+  const [name, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      console.log(name);
+      console.log(password);
+      console.log(email);
+
+      if (login) {
+        const { data } = await axios.post(`${backendUrl}/api/user/login`, {
+          email,
+          password,
+        });
+        if (data.success) {
+          loginUser(data.token, data.user);
+          setShowLogin(false);
+          localStorage.setItem("tokens", data.token);
+          navigate("/");
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        const { data } = await axios.post(`${backendUrl}/api/user/register`, {
+          name,
+          email,
+          password,
+        });
+        console.log(data);
+
+        if (data.success) {
+          loginUser(data.token, data.user);
+          setShowLogin(false);
+          localStorage.setItem("tokens", data.token);
+          navigate("/");
+        } else {
+          toast.error(data.message);
+        }
       }
-      else{
-        toast.error(data.message);
-      }
+    } catch (error) {
+      console.log(error.message);
     }
-    else{
-      const {data} = await axios.post(`${backendUrl}/api/user/register`,{
-        name,email,password
-      })
-      console.log(data);
-      
-      if(data.success){
-       loginUser(data.token,data.user);
-        setShowLogin(false);
-        localStorage.setItem("tokens",data.token);
-        navigate("/");
-      }
-      else{
-        toast.error(data.message);
-      }
-    }
-  } catch (error) {
-    console.log(error.message);
-    
-  }
-}
+  };
   return (
-    <div className="min-h-screen flex justify-center items-center px-4 bg-gradient-to-br from-[#1A9E83]/5 via-[#1a9e83b4]/25 to-white">
-      
+    <div className="min-h-screen flex justify-center items-center px-4 bg-white bg-gradient-to-br from-[#1A9E83]/5 via-[#1a9e83b4]/25 to-white dark:bg-[#16171d] dark:from-[#16171d] dark:via-[#1a2e29] dark:to-[#16171d]">
       {/* LOGIN */}
       {login ? (
-        <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-md border border-gray-100 rounded shadow-lg p-6 flex flex-col bg-white transition-all duration-300">
-          
-          <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+        <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-md border border-gray-100 rounded shadow-lg p-6 flex flex-col bg-white transition-all duration-300 dark:bg-[#1f2028] dark:border-gray-700">
+          <h2 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">Login</h2>
 
           <form>
             {/* Email */}
             <div className="mb-4">
-              <label className="block text-lg font-medium text-gray-700">
+              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">
                 Email
               </label>
               <input
                 type="email"
-                onChange={(e)=>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83]"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83] dark:border-gray-600 dark:bg-[#1a1b22] dark:text-gray-200"
               />
             </div>
 
             {/* Password */}
             <div className="mb-4">
-              <label className="block text-lg font-medium text-gray-700">
+              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">
                 Password
               </label>
               <input
                 type="password"
-                onChange={(e)=>setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83]"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83] dark:border-gray-600 dark:bg-[#1a1b22] dark:text-gray-200"
               />
             </div>
 
@@ -101,7 +97,7 @@ const onSubmitHandler = async(e)=>{
             </button>
 
             {/* Toggle */}
-            <p className="text-center mt-3 text-sm">
+            <p className="text-center mt-3 text-sm text-gray-600 dark:text-gray-400">
               Don't have an account?{" "}
               <span
                 onClick={() => setLogin(false)}
@@ -113,49 +109,47 @@ const onSubmitHandler = async(e)=>{
           </form>
         </div>
       ) : (
-        
         /* SIGNUP */
-        <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-md border border-gray-100 rounded shadow-lg p-6 flex flex-col bg-white transition-all duration-300">
-          
-          <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
+        <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-md border border-gray-100 rounded shadow-lg p-6 flex flex-col bg-white transition-all duration-300 dark:bg-[#1f2028] dark:border-gray-700">
+          <h2 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">Sign Up</h2>
 
           <form>
             {/* Username */}
             <div className="mb-4">
-              <label className="block text-lg font-medium text-gray-700">
+              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">
                 Username
               </label>
               <input
                 type="text"
-                onChange={(e)=>setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter username"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83]"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83] dark:border-gray-600 dark:bg-[#1a1b22] dark:text-gray-200"
               />
             </div>
 
             {/* Email */}
             <div className="mb-4">
-              <label className="block text-lg font-medium text-gray-700">
+              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">
                 Email
               </label>
               <input
                 type="email"
-                onChange={(e)=>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter email"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83]"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83] dark:border-gray-600 dark:bg-[#1a1b22] dark:text-gray-200"
               />
             </div>
 
             {/* Password */}
             <div className="mb-4">
-              <label className="block text-lg font-medium text-gray-700">
+              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">
                 Password
               </label>
               <input
                 type="password"
-                onChange={(e)=>setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83]"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 px-2 focus:ring-2 focus:ring-[#1A9E83] focus:border-[#1A9E83] dark:border-gray-600 dark:bg-[#1a1b22] dark:text-gray-200"
               />
             </div>
 
@@ -169,7 +163,7 @@ const onSubmitHandler = async(e)=>{
             </button>
 
             {/* Toggle */}
-            <p className="text-center mt-3 text-sm">
+            <p className="text-center mt-3 text-sm text-gray-600 dark:text-gray-400">
               Already have an account?{" "}
               <span
                 onClick={() => setLogin(true)}
