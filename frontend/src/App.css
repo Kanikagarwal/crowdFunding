@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
-.container{
+/* Override Tailwind's default dark mode (prefers-color-scheme)
+   to use class-based dark mode (.dark on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+.container {
   margin: 0 auto;
   padding: 0 80px;
 }
-
